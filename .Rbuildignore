@@ -4,3 +4,4 @@
 ^README\.Rmd$
 ^README.Rmd
 ^README.html
+^data-raw$

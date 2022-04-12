@@ -2,3 +2,4 @@
 
 export(identify_clusters)
 export(refactor_branching_structure)
+export(simulate_hawkes_cluster)

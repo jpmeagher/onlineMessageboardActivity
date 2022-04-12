@@ -11,14 +11,14 @@
 #'   of offspring from each event.
 #' @param gi_exp_decay_rate A positive real valued scalar. The exponential rate
 #'   of decay in the density function of the generation interval distribution,
-#' @param horizon A real valued scalar greater than \texttt{t_i}. The time up to
+#' @param horizon A real valued scalar greater than \eqn{t_i}. The time up to
 #'   which events in the cluster are simulated.
 #' @param cluster_id A scalar.An arbitrary cluster label.
 #' @inheritParams refactor_branching_structure
 #'
-#' @return A data frame with 4 variables: timestamps \texttt{t}, labels
-#'   \texttt{id}; parent labels \texttt{parent_id}; cluster label
-#'   \texttt{cluster_id}.
+#' @return A data frame with 4 variables: timestamps \eqn{t}, labels
+#'   \eqn{id}; parent labels \eqn{parent_id}; cluster label
+#'   \eqn{cluster_id}.
 #' @export
 simulate_hawkes_cluster <- function(
   t_i,
