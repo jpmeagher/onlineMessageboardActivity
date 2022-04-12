@@ -1,0 +1,12 @@
+Package: onlineMessageboardActivity
+Type: Package
+Title: Online Meassageboard Activity as Poisson Cluster Processes
+Version: 0.0.0.9000
+Author: Joe Meagher
+Maintainer: Joe Meagher <josephmeagher07@gmail.com>
+Description: Poisson cluster processes, of which the Hawkes process is a special case,
+    are useful family of models for onling messageboard activity. This package includes 
+    algorithms for data manipulation, simulation and inference.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
