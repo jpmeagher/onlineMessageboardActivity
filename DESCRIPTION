@@ -5,8 +5,15 @@ Version: 0.0.0.9000
 Author: Joe Meagher
 Maintainer: Joe Meagher <josephmeagher07@gmail.com>
 Description: Poisson cluster processes, of which the Hawkes process is a special case,
-    are useful family of models for onling messageboard activity. This package includes 
+    are useful family of models for online messageboard activity. This package includes 
     algorithms for data manipulation, simulation and inference.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.1.2
+Imports: 
+    future.apply,
+    checkmate
