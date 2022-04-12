@@ -37,3 +37,33 @@ testthat::test_that("branching structure correctly refactored",{
       )
     )
   })
+
+testthat::test_that("trees labelled correctly",{
+  tst_N <- 200
+  tst_B <- sapply(
+    1:tst_N, function(i){
+      u <- runif(1)
+      if (u < 0.25) {
+        b <- 0
+      } else {
+        b <- sample(1:(i-1), 1)
+      }
+      b
+    })
+  tst_trees <- rep(NA, tst_N)
+  k <- 1
+  for (i in 1:tst_N) {
+    if(tst_B[i] == 0) {
+      tst_trees[i] <- k
+      k <- k+1
+    } else {
+      tst_trees[i] <- tst_trees[tst_B[i]]
+    }
+  }
+
+  expect_equal(
+    tst_trees,
+    identify_clusters(tst_B)
+  )
+})
+

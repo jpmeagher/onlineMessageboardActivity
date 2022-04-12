@@ -15,20 +15,24 @@ refactor_branching_structure(
 \arguments{
 \item{id}{An N-dimensional vector of unique event ids.}
 
-\item{parent_id}{An N-dimensional vector noting the id of the parent for each event.}
+\item{parent_id}{An N-dimensional vector noting the id of the parent for each
+event.}
 
 \item{is_immigrant}{An N-dimensional logical vector identifying immigrants.}
 
-\item{S}{An integer scalar such that \eqn{0 < S \leq N}. Refactoring can be more efficient when we consider the most recent
-S events as possible parents before executing a full sweep.}
+\item{S}{An integer scalar such that \eqn{0 < S \le N}. Refactoring can be
+more efficient when we consider the most recent S events as possible
+parents before executing a full sweep over all possible parents.}
 
-\item{perform_checks}{A logical scalar. Should inputs be checked before executing code.}
+\item{perform_checks}{A logical scalar. Should inputs be checked before
+executing code.}
 }
 \value{
-The vector of non-negative integers that define the branching structure.
+The vector of non-negative integers that define the branching
+  structure.
 }
 \description{
-Refactors a branching structure such that \eqn{e_j = i} if the event at index \eqn{j}
-is the offspring of the event at index \eqn{i} and \eqn{e_j = 0} otherwise (if the event is an immigrant.)
-The code assumes that \eqn{i < j}.
+Refactors a branching structure such that \eqn{e_j = i} if the event at index
+\eqn{j} is the offspring of the event at index \eqn{i} and \eqn{e_j = 0}
+otherwise (if the event is an immigrant.) The code assumes that \eqn{i < j}.
 }

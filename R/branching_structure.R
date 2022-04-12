@@ -1,17 +1,21 @@
 #' Refactor Branching Structure
 #'
-#' Refactors a branching structure such that \eqn{e_j = i} if the event at index \eqn{j}
-#' is the offspring of the event at index \eqn{i} and \eqn{e_j = 0} otherwise (if the event is an immigrant.)
-#' The code assumes that \eqn{i < j}.
+#' Refactors a branching structure such that \eqn{e_j = i} if the event at index
+#' \eqn{j} is the offspring of the event at index \eqn{i} and \eqn{e_j = 0}
+#' otherwise (if the event is an immigrant.) The code assumes that \eqn{i < j}.
 #'
 #' @param id An N-dimensional vector of unique event ids.
-#' @param parent_id An N-dimensional vector noting the id of the parent for each event.
+#' @param parent_id An N-dimensional vector noting the id of the parent for each
+#'   event.
 #' @param is_immigrant An N-dimensional logical vector identifying immigrants.
-#' @param S An integer scalar such that \eqn{0 < S \leq N}. Refactoring can be more efficient when we consider the most recent
-#' S events as possible parents before executing a full sweep.
-#' @param perform_checks A logical scalar. Should inputs be checked before executing code.
+#' @param S An integer scalar such that \eqn{0 < S \le N}. Refactoring can be
+#'   more efficient when we consider the most recent S events as possible
+#'   parents before executing a full sweep over all possible parents.
+#' @param perform_checks A logical scalar. Should inputs be checked before
+#'   executing code.
 #'
-#' @return The vector of non-negative integers that define the branching structure.
+#' @return The vector of non-negative integers that define the branching
+#'   structure.
 #' @export
 refactor_branching_structure <- function(
   id, parent_id, is_immigrant, S,
@@ -47,4 +51,32 @@ refactor_branching_structure <- function(
     }
   )
   B
+}
+
+#' Identify and label clusters
+#'
+#' Identify and label separate clusters identified from a branching structure
+#' where \eqn{e_j = i} if the event at index \eqn{j} is the offspring of the
+#' event at index \eqn{i} and \eqn{e_j = 0} otherwise. Note that each cluster is
+#' centred on an immigrant event,
+#'
+#' @param branching_structure The vector of non-negative integers that define
+#'   the branching structure.
+#'
+#' @return A vector of positive integers labelling members of each distinct
+#'   cluster
+#' @export
+identify_clusters <- function(branching_structure) {
+  N <- length(branching_structure)
+  checkmate::assert_integerish(branching_structure, lower = 0, upper = N)
+  B <- branching_structure
+  B[is.na(branching_structure)] <- -1
+  cluster <- rep(NA, N)
+  cluster[B == 0] <- 1:sum(B == 0)
+  for (i in 1:N) {
+    if (B[i] > 0) {
+      cluster[i] <- cluster[B[i]]
+    }
+  }
+  cluster
 }
