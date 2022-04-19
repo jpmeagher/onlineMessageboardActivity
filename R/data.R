@@ -33,7 +33,7 @@
 #' A dataset containing discussion trees on the \eqn{r/ireland} subreddit
 #' seeded between April 29 and May 12, 2019 and observed up until May 12, 2019.
 #'
-#' @format A dataframe with 37,792 observations of 4 variables:
+#' @format A dataframe with 37,2022 observations of 4 variables:
 #' \describe{
 #'   \item{id}{A unique, positive integer id for each event ordered by timestamp.}
 #'   \item{parent_id}{The id for the parent of each event. Set to 0 when the event is a post.}

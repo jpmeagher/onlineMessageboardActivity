@@ -75,8 +75,14 @@ train_df <- messageboard_df %>%
 
 usethis::use_data(train_df, overwrite = TRUE)
 
-test_df <- messageboard_df %>%
+test_trees <- messageboard_df %>%
   filter(time >= dmy(29042019)) %>%
+  filter(parent_id == 0) %>%
+  use_series(tree) %>%
+  as.numeric()
+
+test_df <- messageboard_df %>%
+  filter(tree %in% test_trees) %>%
   mutate(
     parent_id = refactor_branching_structure(
       id = id,
