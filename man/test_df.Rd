@@ -5,7 +5,7 @@
 \alias{test_df}
 \title{Testing data for modelling online message-board activity}
 \format{
-A dataframe with 37,792 observations of 4 variables:
+A dataframe with 37,2022 observations of 4 variables:
 \describe{
   \item{id}{A unique, positive integer id for each event ordered by timestamp.}
   \item{parent_id}{The id for the parent of each event. Set to 0 when the event is a post.}

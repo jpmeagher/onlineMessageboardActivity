@@ -30,4 +30,10 @@ testthat::test_that("Simulated Hawkes process satisfies sanity checks", {
       t_i = 0, reproduction_number = -1, gi_exp_decay_rate = 10, horizon = 2
     )
   )
+
+  simulate_hawkes_cluster(
+    t_i = 0,
+    reproduction_number = 0.67, gi_exp_decay_rate = 0.27,
+    horizon = 3
+  )
 })
