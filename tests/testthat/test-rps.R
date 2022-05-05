@@ -33,3 +33,15 @@ test_that("Check rps when we expand the forecast range", {
     verification::rps(obs = y, pred = t(prob_sc))$rps
   )
 })
+
+test_that("PWM CRPS seems to work well", {
+  y <- 3
+  z <- rnbinom(100, size = 0.1, mu = 3)
+
+  expect_equal(
+    mean(abs(y - z)) + mean(z) - 2 * sum((0:99) * sort(z)) / (100 * (99)),
+    compute_pwm_crps(
+      obs = y, pred = z
+    )
+  )
+})

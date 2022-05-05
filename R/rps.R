@@ -37,3 +37,27 @@ compute_rps <- function(
   ## RPS
   sum((cum_pred_prob - cum_obs)^2) / (n_outcomes - 1)
 }
+
+#' Compute the PWM form of the CPRS
+#'
+#' Computes the Probability Weighted Moment form of the Continuous Ranked Probability
+#' Score, This is an unbiased estimate for the CRPS.
+#'
+#' @param obs A real-valued scalar. The observed value.
+#' @param pred A real-valued vector. A set of forecasts.
+#' @inheritParams refactor_branching_structure
+#'
+#' @return A positive scalar value. Smaller values correspond to better probabilistic forecasts.
+#' @export
+compute_pwm_crps <- function(
+  obs, pred,
+  perform_checks = TRUE
+){
+  if (perform_checks) {
+    checkmate::assert_number(obs)
+    checkmate::assert_numeric(pred, finite = TRUE, any.missing = FALSE, min.len = 2)
+  }
+  M <- length(pred)
+  tmp_pred <- sort(pred)
+  mean(abs(pred - obs)) + mean(pred) - 2 * sum((1:M - 1) * tmp_pred) / (M * (M-1))
+}

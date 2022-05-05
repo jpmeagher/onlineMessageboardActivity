@@ -34,6 +34,12 @@ Denoted \eqn{\beta} above.}
 \item{sinusoid_frequencies}{A positive real-valued vector of length \eqn{K}.
 Angular frequencies of the sinusoidal basis. Denoted \eqn{\omega} above.}
 
+\item{observation_horizon}{A real valued scalar. The time up to which events
+in the cluster are observed.}
+
+\item{simulation_horizon}{A real valued scalar. The time up to which events
+in the cluster are simulated.}
+
 \item{dominating_scalar}{A positive real valued scalar greater than \eqn{\rho
 (t)} for all \eqn{t}. Allows Lewis thinning for simulating the offspring
 process.}

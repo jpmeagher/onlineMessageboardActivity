@@ -1,31 +1,33 @@
-##### Packages #####
-library(dplyr)
-library(lubridate)
+# ##### Set important time-points #####
+t_min <- lubridate::ymd_hms(20190401000000, tz = "Europe/London")
+tau_threshold_short <- 3
+# ## Interesting test case:
+tst_tr <- 1415
+tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
+  dplyr::mutate(
+    t = difftime(time, t_min, units = "hours") %>% as.numeric()
+  ) %>%
+  dplyr::mutate(
+    t = t - min(t)
+  ) %>%
+  dplyr::mutate(
+    parent_id = refactor_branching_structure(
+      id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = nrow(.)
+    )
+  ) %>%
+  dplyr::mutate(
+    id = 1:nrow(.)
+  ) %>%
+  dplyr::filter(t < tau_threshold_short) %>%
+  dplyr::select(id, parent_id, t)
+
+day <- 24
+f <- 1 / c(day / 2, day, 7 * day)
+w <- 2 * pi * f
+set.seed(101)
+beta <- runif(2 * length(w)) / 10
 
 testthat::test_that("Simulated Hawkes process satisfies sanity checks", {
-  # ##### Set important time-points #####
-  t_min <- ymd_hms(20190401000000, tz = "Europe/London")
-  tau_threshold_short <- 3
-  # ## Interesting test case:
-  tst_tr <- 1415
-  tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
-    mutate(
-      t = difftime(time, t_min, units = "hours") %>% as.numeric()
-    ) %>%
-    mutate(
-      t = t - min(t)
-    ) %>%
-    mutate(
-      parent_id = refactor_branching_structure(
-        id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = nrow(.)
-      )
-    ) %>%
-    mutate(
-      id = 1:nrow(.)
-    ) %>%
-    filter(t < tau_threshold_short) %>%
-    select(id, parent_id, t)
-
   set.seed(1011)
   tst <- simulate_hawkes_cluster(
     observed_cluster_df = tst_cl,
@@ -58,29 +60,6 @@ testthat::test_that("Simulated Hawkes process satisfies sanity checks", {
 })
 
 testthat::test_that("Simulated DS Hawkes process satisfies sanity checks", {
-  # ##### Set important time-points #####
-  t_min <- ymd_hms(20190401000000, tz = "Europe/London")
-  tau_threshold_short <- 3
-  # ## Interesting test case:
-  tst_tr <- 1415
-  tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
-    mutate(
-      t = difftime(time, t_min, units = "hours") %>% as.numeric()
-    ) %>%
-    mutate(
-      t = t - min(t)
-    ) %>%
-    mutate(
-      parent_id = refactor_branching_structure(
-        id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = nrow(.)
-      )
-    ) %>%
-    mutate(
-      id = 1:nrow(.)
-    ) %>%
-    filter(t < tau_threshold_short) %>%
-    select(id, parent_id, t)
-
   set.seed(1011)
   tst <- simulate_ds_hawkes_cluster(
     observed_cluster_df = tst_cl,
@@ -114,35 +93,6 @@ testthat::test_that("Simulated DS Hawkes process satisfies sanity checks", {
 })
 
 testthat::test_that("Simulated Ti-De Hawkes process satisfies sanity checks", {
-  # ##### Set important time-points #####
-  t_min <- ymd_hms(20190401000000, tz = "Europe/London")
-  tau_threshold_short <- 3
-  # ## Interesting test case:
-  tst_tr <- 1415
-  tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
-    mutate(
-      t = difftime(time, t_min, units = "hours") %>% as.numeric()
-    ) %>%
-    mutate(
-      t = t - min(t)
-    ) %>%
-    mutate(
-      parent_id = refactor_branching_structure(
-        id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = nrow(.)
-      )
-    ) %>%
-    mutate(
-      id = 1:nrow(.)
-    ) %>%
-    filter(t < tau_threshold_short) %>%
-    select(id, parent_id, t)
-
-  day <- 24
-  f <- 1 / c(day / 2, day, 7 * day)
-  w <- 2 * pi * f
-  set.seed(101)
-  beta <- runif(2 * length(w)) / 10
-
   set.seed(1012)
   tst <- simulate_tide_hawkes_cluster(
     observed_cluster_df = tst_cl,
@@ -176,36 +126,7 @@ testthat::test_that("Simulated Ti-De Hawkes process satisfies sanity checks", {
   )
 })
 
-testthat::test_that("Simulated Ti-De Hawkes process satisfies sanity checks", {
-  # ##### Set important time-points #####
-  t_min <- ymd_hms(20190401000000, tz = "Europe/London")
-  tau_threshold_short <- 3
-  # ## Interesting test case:
-  tst_tr <- 1415
-  tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
-    mutate(
-      t = difftime(time, t_min, units = "hours") %>% as.numeric()
-    ) %>%
-    mutate(
-      t = t - min(t)
-    ) %>%
-    mutate(
-      parent_id = refactor_branching_structure(
-        id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = nrow(.)
-      )
-    ) %>%
-    mutate(
-      id = 1:nrow(.)
-    ) %>%
-    filter(t < tau_threshold_short) %>%
-    select(id, parent_id, t)
-
-  day <- 24
-  f <- 1 / c(day / 2, day, 7 * day)
-  w <- 2 * pi * f
-  set.seed(101)
-  beta <- runif(2 * length(w)) / 10
-
+testthat::test_that("Simulated Ti-De DS Hawkes process satisfies sanity checks", {
   set.seed(1011)
   tst <- simulate_tide_ds_hawkes_cluster(
     observed_cluster_df = tst_cl,

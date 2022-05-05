@@ -49,7 +49,8 @@ simulate_hawkes_cluster <- function(
     checkmate::assert_number(observation_horizon, lower = max(observed_cluster_df$t), finite = TRUE)
     checkmate::assert_number(simulation_horizon, lower = max(observation_horizon), finite = TRUE)
   }
-  cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  # cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  cluster_df <- observed_cluster_df[, colnames(observed_cluster_df) %in% c("id", "parent_id", "t")]
   # Note generation of each observation
   cluster_df$gen <- NA
   i <- 1
@@ -107,7 +108,8 @@ simulate_hawkes_cluster <- function(
     perform_checks = FALSE
   )
   cluster_df$id <- seq_along(cluster_df$id)
-  dplyr::select(cluster_df, id, parent_id, t, gen)
+  # dplyr::select(cluster_df, id, parent_id, t, gen)
+  cluster_df[, colnames(cluster_df) %in% c("id", "parent_id", "t")]
 }
 
 #' Simulate Doubly-Stochastic Hawkes process cluster
@@ -155,7 +157,8 @@ simulate_ds_hawkes_cluster <- function(
     checkmate::assert_number(observation_horizon, lower = max(observed_cluster_df$t), finite = TRUE)
     checkmate::assert_number(simulation_horizon, lower = max(observation_horizon), finite = TRUE)
   }
-  cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  # cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  cluster_df <- observed_cluster_df[, colnames(observed_cluster_df) %in% c("id", "parent_id", "t")]
   # Note generation of each observation
   cluster_df$gen <- NA
   i <- 1
@@ -226,7 +229,8 @@ simulate_ds_hawkes_cluster <- function(
     perform_checks = FALSE
   )
   cluster_df$id <- seq_along(cluster_df$id)
-  dplyr::select(cluster_df, id, parent_id, t, gen)
+  # dplyr::select(cluster_df, id, parent_id, t, gen)
+  cluster_df[, colnames(cluster_df) %in% c("id", "parent_id", "t")]
 }
 
 #' Simulate Time-Dependant Hawkes process cluster
@@ -283,7 +287,8 @@ simulate_tide_hawkes_cluster <- function(
     }
     checkmate::assert_numeric(sinusoid_frequencies, any.missing = FALSE, lower = 0)
   }
-  cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  # cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  cluster_df <- observed_cluster_df[, colnames(observed_cluster_df) %in% c("id", "parent_id", "t")]
   # Note generation of each observation
   cluster_df$gen <- NA
   i <- 1
@@ -356,7 +361,8 @@ simulate_tide_hawkes_cluster <- function(
     perform_checks = FALSE
   )
   cluster_df$id <- seq_along(cluster_df$id)
-  dplyr::select(cluster_df, id, parent_id, t, gen)
+  # dplyr::select(cluster_df, id, parent_id, t, gen)
+  cluster_df[, colnames(cluster_df) %in% c("id", "parent_id", "t")]
 }
 
 #' Simulate a Time-Dependant Doubly-Stochastic Hawkes process cluster
@@ -415,7 +421,8 @@ simulate_tide_ds_hawkes_cluster <- function(
     }
     checkmate::assert_numeric(sinusoid_frequencies, any.missing = FALSE, lower = 0)
   }
-  cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  # cluster_df <- dplyr::select(observed_cluster_df, id, parent_id, t)
+  cluster_df <- observed_cluster_df[, colnames(observed_cluster_df) %in% c("id", "parent_id", "t")]
   # Note generation of each observation
   cluster_df$gen <- NA
   i <- 1
@@ -501,5 +508,6 @@ simulate_tide_ds_hawkes_cluster <- function(
     perform_checks = FALSE
   )
   cluster_df$id <- seq_along(cluster_df$id)
-  dplyr::select(cluster_df, id, parent_id, t, gen)
+  # dplyr::select(cluster_df, id, parent_id, t, gen)
+  cluster_df[, colnames(cluster_df) %in% c("id", "parent_id", "t")]
 }

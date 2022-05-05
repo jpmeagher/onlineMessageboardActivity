@@ -29,6 +29,12 @@ parameter for offspring from each event, denoted \eqn{k}.}
 \item{gi_exp_decay_rate}{A positive real valued scalar. The exponential rate
 of decay in the density function of the generation interval distribution,}
 
+\item{observation_horizon}{A real valued scalar. The time up to which events
+in the cluster are observed.}
+
+\item{simulation_horizon}{A real valued scalar. The time up to which events
+in the cluster are simulated.}
+
 \item{cluster_id}{A scalar.An arbitrary cluster label.}
 
 \item{perform_checks}{A logical scalar. Should inputs be checked before
