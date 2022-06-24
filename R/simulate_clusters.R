@@ -125,7 +125,6 @@ simulate_hawkes_cluster <- function(
 #' @inheritParams simulate_hawkes_cluster
 #' @param dispersion_parameter A positive real valued scalar. The dispersion
 #'   parameter for offspring from each event, denoted \eqn{k}.
-#' @inheritParams
 #'
 #' @return A data frame with 4 variables: timestamps \eqn{t}, labels \eqn{id};
 #'   parent labels \eqn{parent_id}; cluster label \eqn{cluster_id}.

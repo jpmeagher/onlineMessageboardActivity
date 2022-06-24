@@ -12,6 +12,10 @@
 #' @import methods
 #' @import Rcpp
 #' @importFrom rstan sampling
+#' @importFrom RcppParallel CxxFlags
+#' @importFrom lubridate am
+#' @importFrom rstantools rstan_config
+#' @importFrom verification rps
 #'
 #' @references Stan Development Team (2020). RStan: the R interface to Stan. R
 #'   package version 2.19.3. https://mc-stan.org
