@@ -110,18 +110,18 @@ sinusoidal_exponential_decay_integral <- function(
         c(
           (exponential_rate / (exponential_rate^2 + x^2)) * (
             exponential_rate * (
-                sin(x * lower_limit) - sin(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit))
+                sin(x * lower_limit) - (sin(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit)))
                 ) +
               x * (
-                cos(x * lower_limit) - cos(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit))
+                cos(x * lower_limit) - (cos(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit)))
               )
           ),
           (exponential_rate / (exponential_rate^2 + x^2)) * (
             x * (
-              sin(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit)) - sin(x * lower_limit)
-              ) +
+              (sin(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit))) - sin(x * lower_limit)
+              ) -
             exponential_rate * (
-              cos(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit)) - cos(x * lower_limit)
+              (cos(x * upper_limit) * exp(-exponential_rate * (upper_limit - lower_limit))) - cos(x * lower_limit)
             )
           )
         )

@@ -50,6 +50,24 @@ test_that("integral of sinusoids works", {
   w <- 2 * pi * f
   beta <- runif(2 * length(w))
 
+  tst_f <- function(t){
+    sinusoidal_function(
+      t,
+      sinusoid_coefficients = beta, sinusoid_frequencies = w
+    )
+  }
+
+  expect_equal(
+    sinusoidal_integral(
+      lower_limit = a, upper_limit = b,
+      sinusoid_coefficients = beta, sinusoid_frequencies = w,
+      perform_checks = TRUE
+    ),
+    integrate(tst_f, lower = a, upper = b)$value,
+    tolerance = integrate(tst_f, lower = a, upper = b)$abs.error
+  )
+
+
   tst <- sinusoidal_integral(
     lower_limit = t, upper_limit = b,
     sinusoid_coefficients = beta, sinusoid_frequencies = w,
@@ -120,16 +138,60 @@ test_that("integral of sinusoids works", {
 })
 
 test_that("integral of exponentially decaying sinusoids works", {
-  t <- seq(-100, 100, length.out = 1001)
-  a <- -200
-  b <- 200
+  t <- seq(0, 50, length.out = 1001)
+  a <- 0
+  b <- 50
 
   day <- 24
-  f <- 1 / c(day / 2, day, 7 * day)
+  f <- 1 / c(day / 2, day)
   w <- 2 * pi * f
-  beta <- runif(2 * length(w))
+  beta <- c(-0.17, -0.59, -0.25, 0.34)
 
   psi <- 0.33
+
+  tst <- sinusoidal_exponential_decay_integral(
+    lower_limit = a, upper_limit = b,
+    sinusoid_coefficients = beta, sinusoid_frequencies = w,
+    exponential_rate = psi,
+    perform_checks = TRUE
+  )
+
+  tst_f <- function(t, t0, alpha, omega, gi_rate){
+    N <- length(t)
+    K <- length(omega)
+    sinusoidal_basis <- matrix(
+      sapply(
+        omega, function(x){
+          c(
+            sin(t * x) * dexp(t-t0, rate = gi_rate),
+            cos(t * x) * dexp(t-t0, rate = gi_rate)
+            )
+        }), nrow = N, ncol = 2*K)
+
+    c(sinusoidal_basis %*% alpha)
+  }
+
+  plot(
+    t,
+    tst_f(
+      t, t0 = 0,
+      alpha = beta, omega = w,
+      gi_rate = psi
+      )
+  )
+
+  num_int <- integrate(
+    tst_f, lower = a, upper = b,
+    t0 = 0,
+    alpha = beta, omega = w,
+    gi_rate = psi
+    )
+
+  expect_equal(
+    tst,
+    num_int$value,
+    tolerance = num_int$abs.error
+  )
 
   tst <- sinusoidal_exponential_decay_integral(
     lower_limit = t, upper_limit = b,
@@ -155,7 +217,7 @@ test_that("integral of exponentially decaying sinusoids works", {
       (psi / (psi^2 + w[k]^2)) * (
         w[k] * (
           (sin(w[k] * b) * exp( -psi * (b - t))) - sin(w[k] * t)
-        ) +
+        ) -
           psi * (
             (cos(w[k] * b) * exp( -psi * (b - t))) - cos(w[k] * t)
           )
@@ -193,7 +255,7 @@ test_that("integral of exponentially decaying sinusoids works", {
       (psi / (psi^2 + w[k]^2)) * (
         w[k] * (
           (sin(w[k] * t) * exp( -psi * (t - a))) - sin(w[k] * a)
-        ) +
+        ) -
           psi * (
             (cos(w[k] * t) * exp( -psi * (t - a))) - cos(w[k] * a)
           )
@@ -231,7 +293,7 @@ test_that("integral of exponentially decaying sinusoids works", {
       (psi / (psi^2 + w[k]^2)) * (
         w[k] * (
           (sin(w[k] * b) * exp( -psi * (b - a))) - sin(w[k] * a)
-        ) +
+        ) -
           psi * (
             (cos(w[k] * b) * exp( -psi * (b - a))) - cos(w[k] * a)
           )

@@ -22,7 +22,6 @@
 #'
 #' @return A data frame with 4 variables: labels \eqn{id}; parent labels
 #'   \eqn{parent_id}; timestamps \eqn{t}; generation label \eqn{gen}.
-#' @export
 simulate_hawkes_cluster <- function(
   observed_cluster_df,
   reproduction_number,
@@ -128,7 +127,6 @@ simulate_hawkes_cluster <- function(
 #'
 #' @return A data frame with 4 variables: timestamps \eqn{t}, labels \eqn{id};
 #'   parent labels \eqn{parent_id}; cluster label \eqn{cluster_id}.
-#' @export
 simulate_ds_hawkes_cluster <- function(
   observed_cluster_df,
   reproduction_number, dispersion_parameter,
@@ -249,7 +247,6 @@ simulate_ds_hawkes_cluster <- function(
 #'
 #' @return A data frame with 4 variables: timestamps \eqn{t}, labels \eqn{id};
 #'   parent labels \eqn{parent_id}; cluster label \eqn{cluster_id}.
-#' @export
 simulate_tide_hawkes_cluster <- function(
   observed_cluster_df,
   reproduction_number,
@@ -382,7 +379,6 @@ simulate_tide_hawkes_cluster <- function(
 #'
 #' @return A data frame with 4 variables: timestamps \eqn{t}, labels \eqn{id};
 #'   parent labels \eqn{parent_id}; cluster label \eqn{cluster_id}.
-#' @export
 simulate_tide_ds_hawkes_cluster <- function(
   observed_cluster_df,
   reproduction_number, dispersion_parameter,
