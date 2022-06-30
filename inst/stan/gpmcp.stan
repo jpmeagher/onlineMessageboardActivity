@@ -148,7 +148,8 @@ model {
     target += normal_lpdf(log_phi | 0, sigma_phi);
   }
   target += normal_lpdf(log_eta | 0, sigma_eta);
-  target += uniform_lpdf(beta | -1, 1);
+  // target += uniform_lpdf(beta | -1, 1);
+  target += normal_lpdf(beta | 0, 1 / (K * sqrt(2)));
 }
 
 generated quantities {

@@ -33,7 +33,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_gpmcp");
-    reader.add_event(164, 162, "end", "model_gpmcp");
+    reader.add_event(165, 163, "end", "model_gpmcp");
     return reader;
 }
 #include <stan_meta_header.hpp>
@@ -766,8 +766,8 @@ public:
             }
             current_statement_begin__ = 150;
             lp_accum__.add(normal_log(log_eta, 0, sigma_eta));
-            current_statement_begin__ = 151;
-            lp_accum__.add(uniform_log(beta, -(1), 1));
+            current_statement_begin__ = 152;
+            lp_accum__.add(normal_log(beta, 0, (1 / (K * stan::math::sqrt(2)))));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
             // Next line prevents compiler griping about no return
@@ -1119,37 +1119,37 @@ public:
             }
             if (!include_gqs__) return;
             // declare and define generated quantities
-            current_statement_begin__ = 155;
+            current_statement_begin__ = 156;
             validate_non_negative_index("A", "K", K);
             Eigen::Matrix<double, Eigen::Dynamic, 1> A(K);
             stan::math::initialize(A, DUMMY_VAR__);
             stan::math::fill(A, DUMMY_VAR__);
-            current_statement_begin__ = 156;
+            current_statement_begin__ = 157;
             validate_non_negative_index("phase", "K", K);
             Eigen::Matrix<double, Eigen::Dynamic, 1> phase(K);
             stan::math::initialize(phase, DUMMY_VAR__);
             stan::math::fill(phase, DUMMY_VAR__);
             // generated quantities statements
-            current_statement_begin__ = 158;
+            current_statement_begin__ = 159;
             for (int k = 1; k <= K; ++k) {
-                current_statement_begin__ = 159;
+                current_statement_begin__ = 160;
                 stan::model::assign(A, 
                             stan::model::cons_list(stan::model::index_uni(k), stan::model::nil_index_list()), 
                             stan::math::sqrt((pow(get_base1(beta, ((2 * k) - 1), "beta", 1), 2) + pow(get_base1(beta, (2 * k), "beta", 1), 2))), 
                             "assigning variable A");
-                current_statement_begin__ = 160;
+                current_statement_begin__ = 161;
                 stan::model::assign(phase, 
                             stan::model::cons_list(stan::model::index_uni(k), stan::model::nil_index_list()), 
                             atan2(get_base1(beta, (2 * k), "beta", 1), get_base1(beta, ((2 * k) - 1), "beta", 1)), 
                             "assigning variable phase");
             }
             // validate, write generated quantities
-            current_statement_begin__ = 155;
+            current_statement_begin__ = 156;
             size_t A_j_1_max__ = K;
             for (size_t j_1__ = 0; j_1__ < A_j_1_max__; ++j_1__) {
                 vars__.push_back(A(j_1__));
             }
-            current_statement_begin__ = 156;
+            current_statement_begin__ = 157;
             size_t phase_j_1_max__ = K;
             for (size_t j_1__ = 0; j_1__ < phase_j_1_max__; ++j_1__) {
                 vars__.push_back(phase(j_1__));
