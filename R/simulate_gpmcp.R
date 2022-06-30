@@ -40,7 +40,7 @@ simulate_poisson_offspring_process <- function(
     checkmate::assert_number(reproduction_number, lower = 0, finite = TRUE)
     checkmate::assert_number(gi_exp_decay_rate, lower = 0, finite = TRUE)
     checkmate::assert_numeric(sinusoid_coefficients, any.missing = FALSE, len = 2*K, null.ok = TRUE)
-    checkmate::assert_numeric(sinusoid_frequencies, any.missing = FALSE, lower = 0, null.ok = TRUE)
+    checkmate::assert_numeric(sinusoid_frequencies, sorted = TRUE, any.missing = FALSE, lower = 0, null.ok = TRUE)
     checkmate::assert_number(dominating_scalar, lower = 1, finite = TRUE)
   }
 
@@ -143,7 +143,7 @@ simulate_gpm_cluster_process <- function(
     checkmate::assert_number(offspring_gi_exp_decay_rate, lower = 0, finite = TRUE)
     checkmate::assert_number(offspring_dispersion_parameter, lower = 0, finite = FALSE)
     checkmate::assert_numeric(sinusoid_coefficients, any.missing = FALSE, len = 2*K, null.ok = TRUE)
-    checkmate::assert_numeric(sinusoid_frequencies, any.missing = FALSE, lower = 0, null.ok = TRUE)
+    checkmate::assert_numeric(sinusoid_frequencies, sorted = TRUE, any.missing = FALSE, lower = 0, null.ok = TRUE)
     checkmate::assert_number(dominating_scalar, lower = 1, finite = TRUE)
   }
   ## Data preparation and transformation

@@ -130,7 +130,7 @@ test_that("we can simulate time-dependant Poisson offspring processes", {
   tau2 <- 100
 
   day <- 24
-  f <- 1 / c(day / 2, day)
+  f <- 1 / c(day, day / 2)
   w <- 2 * pi * f
   set.seed(101)
   beta <- c(-0.17, -0.59, -0.25, 0.34)
@@ -276,7 +276,7 @@ test_that("simulating hawkes from gpmcp works", {
   expect_true(all(diff(tst$t) > 0))
 
   day <- 24
-  f <- 1 / c(day / 2, day)
+  f <- 1 / c(day, day / 2)
   w <- 2 * pi * f
   beta <- c(-0.17, -0.59, -0.25, 0.34)
 

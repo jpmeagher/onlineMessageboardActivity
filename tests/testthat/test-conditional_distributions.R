@@ -9,7 +9,7 @@ test_that("individual reproduction number posterior", {
   psi <- 0.25
 
   day <- 24
-  f <- 1 / c(day / 2, day, 7 * day)
+  f <- 1 / c(7 * day, day, day / 2)
   w <- 2 * pi * f
   beta <- runif(2 * length(w))
 

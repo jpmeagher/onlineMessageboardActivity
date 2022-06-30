@@ -48,12 +48,12 @@ fit_gpmcp <- function(
     checkmate::assert_number(b, lower = max(t))
     checkmate::assert_logical(is_hetero)
     checkmate::assert_integerish(K, lower = 0)
-    checkmate::assert_numeric(f, len = K, any.missing = FALSE, lower = 0)
+    checkmate::assert_numeric(f, sorted = TRUE, len = K, any.missing = FALSE, lower = 0)
     checkmate::assert_number(sigma_R, lower = 0, finite = TRUE)
     checkmate::assert_number(sigma_phi, lower = 0, finite = TRUE)
     checkmate::assert_number(sigma_eta, lower = 0, finite = TRUE)
   }
-
+  print(f)
   standata <- list(
     N = N, N_1 = sum(branching_structure != 0),
     a = a, b = b,

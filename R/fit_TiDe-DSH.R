@@ -34,7 +34,7 @@ fit_TiDeDSH <- function(
     checkmate::assert_number(b, lower = max(t))
     checkmate::assert_logical(is_ds)
     checkmate::assert_integerish(K, lower = 0)
-    checkmate::assert_numeric(f, len = K, any.missing = FALSE, lower = 0)
+    checkmate::assert_numeric(f, sorted = TRUE, len = K, any.missing = FALSE, lower = 0)
 
   }
 

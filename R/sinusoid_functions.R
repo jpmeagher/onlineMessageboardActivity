@@ -101,7 +101,7 @@ sinusoidal_exponential_decay_integral <- function(
     checkmate::assert_numeric(upper_limit, any.missing = FALSE, finite = TRUE)
     checkmate::assert_true(all(lower_limit <= upper_limit))
     checkmate::assert_numeric(sinusoid_coefficients, any.missing = FALSE, len = 2*K)
-    checkmate::assert_numeric(sinusoid_frequencies, any.missing = FALSE, lower = 0)
+    checkmate::assert_numeric(sinusoid_frequencies, sorted = TRUE, any.missing = FALSE, lower = 0)
     checkmate::assert_number(exponential_rate, lower = 0)
   }
   integral_basis <- matrix(

@@ -143,7 +143,7 @@ test_that("integral of exponentially decaying sinusoids works", {
   b <- 50
 
   day <- 24
-  f <- 1 / c(day / 2, day)
+  f <- 1 / c(day, day / 2)
   w <- 2 * pi * f
   beta <- c(-0.17, -0.59, -0.25, 0.34)
 
@@ -171,14 +171,14 @@ test_that("integral of exponentially decaying sinusoids works", {
     c(sinusoidal_basis %*% alpha)
   }
 
-  plot(
-    t,
-    tst_f(
-      t, t0 = 0,
-      alpha = beta, omega = w,
-      gi_rate = psi
-      )
-  )
+  # plot(
+  #   t,
+  #   tst_f(
+  #     t, t0 = 0,
+  #     alpha = beta, omega = w,
+  #     gi_rate = psi
+  #     )
+  # )
 
   num_int <- integrate(
     tst_f, lower = a, upper = b,
