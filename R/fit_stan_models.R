@@ -53,7 +53,6 @@ fit_gpmcp <- function(
     checkmate::assert_number(sigma_phi, lower = 0, finite = TRUE)
     checkmate::assert_number(sigma_eta, lower = 0, finite = TRUE)
   }
-  print(f)
   standata <- list(
     N = N, N_1 = sum(branching_structure != 0),
     a = a, b = b,
