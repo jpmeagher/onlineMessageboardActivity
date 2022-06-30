@@ -307,4 +307,3 @@ test_that("integral of exponentially decaying sinusoids works", {
     c(S %*% beta)
   )
 })
-
