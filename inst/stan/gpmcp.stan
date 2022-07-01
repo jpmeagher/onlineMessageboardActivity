@@ -66,7 +66,7 @@ transformed parameters {
   real<lower=0> R[N_type]; // reproduction number
   real<lower=0> phi[is_hetero * N_type]; // dispersion parameter
   real<lower=0> eta[N_type]; // gi rate
-  vector<lower=0, upper=2>[N_1] alpha_1; // relative activity levels
+  vector<lower=0>[N_1] alpha_1; // relative activity levels
   matrix[N, 2*K] exp_sinusoidal_basis_integral; // compute the integral for the exponent times the basis
   vector[N_1] tmp_offspring_log_intensity_vector; // temporary vector for offspring intensity
   vector<lower=0>[N] tmp_offspring_scalar_vector; // temporary vector for offspring likelihood scalar

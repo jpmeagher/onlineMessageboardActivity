@@ -699,7 +699,6 @@ public:
                 }
             }
             check_greater_or_equal(function__, "alpha_1", alpha_1, 0);
-            check_less_or_equal(function__, "alpha_1", alpha_1, 2);
             current_statement_begin__ = 70;
             size_t exp_sinusoidal_basis_integral_j_1_max__ = N;
             size_t exp_sinusoidal_basis_integral_j_2_max__ = (2 * K);
@@ -1076,7 +1075,6 @@ public:
             }
             current_statement_begin__ = 69;
             check_greater_or_equal(function__, "alpha_1", alpha_1, 0);
-            check_less_or_equal(function__, "alpha_1", alpha_1, 2);
             current_statement_begin__ = 72;
             check_greater_or_equal(function__, "tmp_offspring_scalar_vector", tmp_offspring_scalar_vector, 0);
             current_statement_begin__ = 74;
