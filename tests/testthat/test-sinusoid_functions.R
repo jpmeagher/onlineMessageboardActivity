@@ -306,4 +306,42 @@ test_that("integral of exponentially decaying sinusoids works", {
     tst,
     c(S %*% beta)
   )
+
+  tst <- sinusoidal_exponential_decay_integral(
+    lower_limit = t, upper_limit = b,
+    sinusoid_coefficients = beta, sinusoid_frequencies = w,
+    exponential_rate = rep(psi, length(t)),
+    perform_checks = TRUE
+  )
+
+  S <- matrix(nrow = length(t), ncol = 2 * length(w))
+  for (k in seq_along(w)) {
+    S[, 2*k - 1] <- (
+      (psi / (psi^2 + w[k]^2)) * (
+        psi * (
+          sin(t * w[k]) - (sin(w[k] * b) * exp( -psi * (b - t)))
+        ) +
+          w[k] * (
+            cos(t * w[k]) - (cos(w[k] * b) * exp( -psi * (b - t)))
+          )
+
+      )
+    )
+    S[, 2*k] <- (
+      (psi / (psi^2 + w[k]^2)) * (
+        w[k] * (
+          (sin(w[k] * b) * exp( -psi * (b - t))) - sin(w[k] * t)
+        ) -
+          psi * (
+            (cos(w[k] * b) * exp( -psi * (b - t))) - cos(w[k] * t)
+          )
+
+      )
+    )
+  }
+
+  expect_equal(
+    tst,
+    c(S %*% beta)
+  )
 })
