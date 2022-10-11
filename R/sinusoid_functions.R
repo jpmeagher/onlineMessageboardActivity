@@ -61,7 +61,7 @@ sinusoidal_integral <- function(
   if (perform_checks) {
     checkmate::assert_numeric(lower_limit, any.missing = FALSE, finite = TRUE)
     checkmate::assert_numeric(upper_limit, any.missing = FALSE, finite = TRUE)
-    checkmate::assert_true(all(lower_limit <= upper_limit))
+    # checkmate::assert_true(all(lower_limit <= upper_limit))
     checkmate::assert_numeric(sinusoid_coefficients, any.missing = FALSE, len = 2*K)
     checkmate::assert_numeric(sinusoid_frequencies, any.missing = FALSE, lower = 0)
   }
@@ -70,7 +70,7 @@ sinusoidal_integral <- function(
       sinusoid_frequencies, function(x){
         c((cos(x * lower_limit) - cos(x * upper_limit)) / x, (sin(x * upper_limit) - sin(x * lower_limit)) / x)
       }), nrow = N, ncol = 2*K)
-
+  integral_basis[lower_limit >= upper_limit] <- 0
   c(integral_basis %*% sinusoid_coefficients)
 }
 
@@ -99,7 +99,7 @@ sinusoidal_exponential_decay_integral <- function(
   if (perform_checks) {
     checkmate::assert_numeric(lower_limit, any.missing = FALSE, finite = TRUE)
     checkmate::assert_numeric(upper_limit, any.missing = FALSE, finite = TRUE)
-    checkmate::assert_true(all(lower_limit <= upper_limit))
+    # checkmate::assert_true(all(lower_limit <= upper_limit))
     checkmate::assert_numeric(sinusoid_coefficients, any.missing = FALSE, len = 2*K)
     checkmate::assert_numeric(sinusoid_frequencies, sorted = TRUE, any.missing = FALSE, lower = 0)
     checkmate::assert_numeric(exponential_rate, lower = 0)
@@ -126,6 +126,6 @@ sinusoidal_exponential_decay_integral <- function(
           )
         )
       }), nrow = N, ncol = 2*K)
-
+  integral_basis[lower_limit >= upper_limit] <- 0
   c(integral_basis %*% sinusoid_coefficients)
 }

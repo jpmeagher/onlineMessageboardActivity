@@ -22,9 +22,11 @@ point process.}
 
 \item{a}{A real valued scalar. The upper limit of the observation interval.}
 
-\item{mu}{A positive real-valued scalar. The reproduction number for each offspring process.}
+\item{mu}{A positive real-valued scalar. The reproduction number for each
+offspring process.}
 
-\item{eta}{A positive real-valued scalar. The memory decay rate for each offspring process.}
+\item{eta}{A positive real-valued scalar. The memory decay rate for each
+offspring process.}
 
 \item{log}{A logical scalar. If `TRUE` then the log-likelihood is returned.}
 
@@ -35,8 +37,8 @@ executing code.}
 A scalar value. The likelihood for the branching point process.
 }
 \description{
-Computes the branching point process likelihood for the class of branching
-processes described in Meagher & Friel.
+Computes the branching point process likelihood for the homogeneous branching
+process described in Meagher & Friel.
 }
 \examples{
 # Set a circadian rhythm
@@ -66,4 +68,7 @@ homogeneous_bpp_likelihood(
   t = sim_cluster$t, beta = sim_cluster$parent_id, a = 8 + 48,
   mu = m, eta = r
 )
+}
+\seealso{
+mixture_bpp_likelihood tide_mixture_bpp_likelihood
 }

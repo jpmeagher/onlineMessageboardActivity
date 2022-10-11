@@ -32,7 +32,7 @@ gamma_posterior_individual_reproduction_number <- function(
     checkmate::assert_numeric(t, any.missing = FALSE)
     checkmate::assert_integerish(observed_offspring, lower = 0)
     checkmate::assert_numeric(observation_horizon, any.missing = FALSE)
-    checkmate::assert_true(all(t < observation_horizon))
+    # checkmate::assert_true(all(t < observation_horizon))
     checkmate::assert_number(reproduction_number, lower = 0)
     checkmate::assert_number(dispersion_parameter, lower = 0)
     checkmate::assert_number(gi_exp_decay_rate, lower = 0)

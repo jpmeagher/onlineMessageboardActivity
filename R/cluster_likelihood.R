@@ -39,6 +39,7 @@ branching_point_process_likelihood <- function(
     checkmate::assert_number(a, lower = max(t))
     checkmate::assert_true(!xor(is.null(alpha), is.null(omega)))
   }
+  N <- length(t)
   # Compensator
   Psi <- stats::pexp(a - t, rate = xi)
   if (!is.null(alpha)) {
@@ -50,7 +51,7 @@ branching_point_process_likelihood <- function(
   Psi <- nu * Psi
   # Exogeneous amplitude
   alpha_fun <- 1
-  if (!is.null(alpha)) {
+  if (!is.null(alpha) & N > 1) {
     alpha_fun <- alpha_fun +
       sinusoidal_function(
         t[-1], alpha, omega, perform_checks = FALSE
@@ -60,7 +61,7 @@ branching_point_process_likelihood <- function(
   # Memory kernel
   l_rho <- log(nu[beta[-1]]) + stats::dexp(t[-1] - t[beta[-1]], rate = xi[beta[-1]], log = TRUE)
   # log-likelihood
-  ll <- sum(l_alpha_fun, l_rho) - sum(Psi)
+  ll <- sum(l_alpha_fun + l_rho) - sum(Psi)
   if (!log) return(exp(ll))
   ll
 }
@@ -68,15 +69,19 @@ branching_point_process_likelihood <- function(
 
 #' Homogeneous Branching Point Process Likelihood
 #'
-#' Computes the branching point process likelihood for the class of branching
-#' processes described in Meagher & Friel.
+#' Computes the branching point process likelihood for the homogeneous branching
+#' process described in Meagher & Friel.
 #'
 #' @inheritParams branching_point_process_likelihood
-#' @param mu A positive real-valued scalar. The reproduction number for each offspring process.
-#' @param eta A positive real-valued scalar. The memory decay rate for each offspring process.
+#' @param mu A positive real-valued scalar. The reproduction number for each
+#'   offspring process.
+#' @param eta A positive real-valued scalar. The memory decay rate for each
+#'   offspring process.
 #'
 #' @return A scalar value. The likelihood for the branching point process.
 #' @export
+#'
+#' @seealso mixture_bpp_likelihood tide_mixture_bpp_likelihood
 #'
 #' @examples
 #' # Set a circadian rhythm
@@ -126,4 +131,188 @@ homogeneous_bpp_likelihood <- function(
     log = log,
     perform_checks = perform_checks
   )
+}
+
+#' Mixture Branching Process Likelihood
+#'
+#' Computes the branching point process likelihood for the mixture branching
+#' process described in Meagher & Friel, whereby the offspring processes for
+#' immigrants and offspring differ, but are otherwise homogeneous.
+#'
+#' @inheritParams homogeneous_bpp_likelihood
+#' @param mu_immigrant A positive real-valued scalar. The reproduction number
+#'   for immigrant offspring processes.
+#' @param eta_immigrant A positive real-valued scalar. The memory decay rate for
+#'   immigrant offspring processes.
+#' @param mu_offspring A positive real-valued scalar. The reproduction number
+#'   for offspring offspring processes.
+#' @param eta_offspring A positive real-valued scalar. The memory decay rate for
+#'   offspring offspring processes.
+#'
+#' @return A scalar value. The likelihood for the branching point process.
+#' @export
+#'
+#' @seealso homogeneous_bpp_likelihood tide_mixture_bpp_likelihood
+#'
+#' @examples
+mixture_bpp_likelihood <- function(
+    t, beta, a,
+    mu_immigrant, eta_immigrant,
+    mu_offspring = mu_immigrant, eta_offspring = eta_immigrant,
+    log = TRUE,
+    perform_checks = TRUE
+){
+  if (perform_checks) {
+    checkmate::assert_number(mu_immigrant, lower = 0)
+    checkmate::assert_number(eta_immigrant, lower = 0)
+    checkmate::assert_number(mu_offspring, lower = 0)
+    checkmate::assert_number(eta_offspring, lower = 0)
+  }
+  N <- length(t)
+  nu <- c(mu_immigrant, rep(mu_offspring, N-1))
+  xi <- c(eta_immigrant, rep(eta_offspring, N-1))
+
+  branching_point_process_likelihood(
+    t = t, beta = beta, a = a,
+    nu = nu, xi = xi,
+    omega = NULL, alpha = NULL,
+    log = log,
+    perform_checks = perform_checks
+  )
+}
+
+#' Time-dependant Mixture Branching Process Likelihood
+#'
+#' Computes the branching point process likelihood for the time-dependant
+#' mixture branching process described in Meagher & Friel, whereby the offspring
+#' processes for immigrants and offspring differ and follow a circadian rhythm,
+#' but are otherwise homogeneous.
+#'
+#'
+#' @inheritParams mixture_bpp_likelihood
+#' @inheritParams branching_point_process_likelihood
+#'
+#' @return A scalar value. The likelihood for the branching point process.
+#' @export
+#'
+#' @seealso homogeneous_bpp_likelihood mixture_bpp_likelihood
+#'
+#' @examples
+tide_mixture_bpp_likelihood <- function(
+    t, beta, a,
+    mu_immigrant, eta_immigrant,
+    mu_offspring = mu_immigrant, eta_offspring = eta_immigrant,
+    omega = NULL, alpha = NULL,
+    log = TRUE,
+    perform_checks = TRUE
+  ){
+  if (perform_checks) {
+    checkmate::assert_number(mu_immigrant, lower = 0)
+    checkmate::assert_number(eta_immigrant, lower = 0)
+    checkmate::assert_number(mu_offspring, lower = 0)
+    checkmate::assert_number(eta_offspring, lower = 0)
+  }
+  N <- length(t)
+  nu <- c(mu_immigrant, rep(mu_offspring, N-1))
+  xi <- c(eta_immigrant, rep(eta_offspring, N-1))
+  branching_point_process_likelihood(
+    t = t, beta = beta, a = a,
+    nu = nu, xi = xi,
+    omega = omega, alpha = alpha,
+    log = log,
+    perform_checks = perform_checks
+  )
+}
+
+#' Heterogeneous Time-dependant Mixture Branching Process Likelihood
+#'
+#' Computes the branching point process likelihood for the heterogeneous time-dependant
+#' mixture branching process described in Meagher & Friel, whereby the offspring
+#' processes for immigrants and offspring differ, follow a circadian rhythm,
+#' and have heterogeneous fitness..
+#'
+#'
+#' @inheritParams tide_mixture_bpp_likelihood
+#' @inheritParams branching_point_process_likelihood
+#' @param a A real-valued scalar. The upper limit of the observation interval for estimating the latent fitness of each point.
+#' @param b A real-valued scalar. The upper limit of the interval over which the likelihood is estimated.
+#' @param psi_immigrant A positive real valued scalar. The dispersion parameter for immigrant point fitness.
+#' @param psi_offsprind A positive real valued scalar. The dispersion parameter for offspring point fitness.
+#' @param n_samples A positive integer. The number of latent fitness samples drawn to produce the Monte Carlo estimator.
+#' @param seed The random seed for sampling fitness variables,
+#'
+#' @return A scalar value. A monte carlo estimator of the likelihood for the branching point process.
+#' @export
+#'
+#' @seealso tide_mixture_bpp_likelihood homogeneous_bpp_likelihood mixture_bpp_likelihood
+#'
+#' @examples
+heterogeneous_tide_mixture_bpp_likelihood <- function(
+    t, beta, a, b = a,
+    mu_immigrant, eta_immigrant, psi_immigrant,
+    mu_offspring = mu_immigrant, eta_offspring = eta_immigrant, psi_offspring = psi_immigrant,
+    omega = NULL, alpha = NULL,
+    log = TRUE, n_samples = 100, seed = NULL,
+    perform_checks = TRUE
+){
+  if (perform_checks) {
+    checkmate::assert_number(mu_immigrant, lower = 0)
+    checkmate::assert_number(eta_immigrant, lower = 0)
+    checkmate::assert_number(psi_immigrant, lower = 0)
+    checkmate::assert_number(mu_offspring, lower = 0)
+    checkmate::assert_number(eta_offspring, lower = 0)
+    checkmate::assert_number(psi_offspring, lower = 0)
+    checkmate::assert_true(!(is.infinite(psi_immigrant) & is.infinite(psi_offspring)))
+    checkmate::assert_count(n_samples)
+  }
+  N <- length(t)
+  beta_obs <- beta[t < a]
+  z_obs <- sapply(seq_along(t), function(i) sum(beta_obs == i))
+
+  xi <- c(eta_immigrant, rep(eta_offspring, N-1))
+  nu <- matrix(NA, nrow = N, ncol = n_samples)
+
+  set.seed(seed)
+  if (is.finite(psi_immigrant)) {
+    post_imm <- gamma_posterior_individual_reproduction_number(
+      t = t[1], observed_offspring = z_obs[1],
+      observation_horizon = a,
+      reproduction_number = mu_immigrant, dispersion_parameter = psi_immigrant,
+      gi_exp_decay_rate = eta_immigrant,
+      sinusoid_coefficients = alpha, sinusoid_frequencies = omega,
+      perform_checks = FALSE
+    )
+    nu[1, ] <-  rgamma(n_samples, shape = post_imm$shape, rate = post_imm$rate)
+  } else {
+    nu[1, ] <- mu_immigrant
+  }
+
+  if (is.finite(psi_offspring)) {
+    post_off <- gamma_posterior_individual_reproduction_number(
+      t = t[-1], observed_offspring = z_obs[-1],
+      observation_horizon = a,
+      reproduction_number = mu_offspring, dispersion_parameter = psi_offspring,
+      gi_exp_decay_rate = eta_offspring,
+      sinusoid_coefficients = alpha, sinusoid_frequencies = omega,
+      perform_checks = TRUE
+    )
+    nu[-1, ] <- replicate(n_samples, {
+      rgamma(N-1, shape = post_off$shape, rate = post_off$rate)
+      })
+  } else {
+    nu[-1, ] <- mu_offspring
+  }
+
+  lpd <- sapply(
+    seq.int(n_samples),
+    function(i){
+      branching_point_process_likelihood(
+        t = t, beta = beta, a = b,
+        nu = nu[, i], xi = xi,
+        omega = omega, alpha = alpha,
+        log = log,
+        perform_checks = perform_checks
+      )
+    })
+  mean(lpd)
 }
