@@ -287,7 +287,7 @@ heterogeneous_tide_mixture_bpp_likelihood <- function(
     nu[1, ] <- mu_immigrant
   }
 
-  if (is.finite(psi_offspring)) {
+  if (is.finite(psi_offspring) & N > 1) {
     post_off <- gamma_posterior_individual_reproduction_number(
       t = t[-1], observed_offspring = z_obs[-1],
       observation_horizon = a,
