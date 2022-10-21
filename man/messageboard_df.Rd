@@ -19,6 +19,6 @@ messageboard_df
 \description{
 A dataset containing timestamps and branching structure for activity on the
 \eqn{r/ireland} subreddit for the 42 days (6 weeks) starting on April 1,
-2019
+2019. Consists of 117,787 events within 38,616 converstaions.
 }
 \keyword{datasets}

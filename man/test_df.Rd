@@ -3,7 +3,7 @@
 \docType{data}
 \name{test_df}
 \alias{test_df}
-\title{Testing data for modelling online message-board activity}
+\title{Testing data models od online message-board activity}
 \format{
 A dataframe with 37,2022 observations of 4 variables:
 \describe{
@@ -18,6 +18,10 @@ test_df
 }
 \description{
 A dataset containing discussion trees on the \eqn{r/ireland} subreddit
-seeded between April 29 and May 12, 2019 and observed up until May 12, 2019.
+seeded between April 29 and May 10, 2019 and observed for 48 hours after the
+initial post. Initially, each discussion seeded during the period is included with
+probability \eqn{p = 0.1}, but those that had already appeared in the training data are
+then excluded. This provides a total of 3,601 discussions consisting of 10,864
+events.
 }
 \keyword{datasets}
