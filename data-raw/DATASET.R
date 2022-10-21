@@ -36,9 +36,9 @@ messageboard_df <- raw_df %>%
       S = 2000
     )) %>%
   mutate(id = 1:nrow(.)) %>%
-  mutate(tree = factor(identify_clusters(parent_id))) %>%
-  select(id, parent_id, tree, time) %>%
-  filter(!is.na(tree)) %>%
+  mutate(discussion = factor(identify_clusters(parent_id))) %>%
+  select(id, parent_id, discussion, time) %>%
+  filter(!is.na(discussion)) %>%
   mutate(
     parent_id = refactor_branching_structure(
       id = id,
@@ -56,7 +56,7 @@ set.seed(123456)
 
 S_training_total <- messageboard_df %>%
   filter(time < dmy(08042019)) %>%
-  use_series(tree) %>%
+  use_series(discussion) %>%
   unique() %>%
   as.numeric() %>%
   max()
@@ -68,7 +68,7 @@ training_discussions <- rbinom(S_training_total, 1, p = 0.1) %>%
 S_training <- length(training_discussions)
 
 train_df <- messageboard_df %>%
-  filter(tree %in% training_discussions) %>%
+  filter(discussion %in% training_discussions) %>%
   mutate(
     parent_id = refactor_branching_structure(
       id = id, parent_id = parent_id,
@@ -78,11 +78,11 @@ train_df <- messageboard_df %>%
   ) %>%
   mutate(id = seq_along(id)) %>%
   mutate(t = as.numeric(difftime(time, dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
-  group_by(tree) %>%
+  group_by(discussion) %>%
   mutate(tau = t - min(t)) %>%
   ungroup() %>%
   filter(tau < max_tau) %>%
-  select(id, parent_id, tree, t)
+  select(id, parent_id, discussion, t)
 
 usethis::use_data(train_df, overwrite = TRUE)
 
@@ -91,7 +91,7 @@ set.seed(1234567)
 
 S_testing_total <- messageboard_df %>%
   filter(time < dmy(11052019)) %>%
-  use_series(tree) %>%
+  use_series(discussion) %>%
   unique() %>%
   as.numeric() %>%
   max()
@@ -104,7 +104,7 @@ testing_discussions <- tmp_testing_discussions %>%
 S_testing <- length(testing_discussions)
 
 test_df <- messageboard_df %>%
-  filter(tree %in% testing_discussions) %>%
+  filter(discussion %in% testing_discussions) %>%
   mutate(
     parent_id = refactor_branching_structure(
       id = id, parent_id = parent_id,
@@ -114,8 +114,8 @@ test_df <- messageboard_df %>%
   ) %>%
   mutate(id = seq_along(id)) %>%
   mutate(t = as.numeric(difftime(time, dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
-  select(id, parent_id, tree, t) %>%
-  group_by(tree) %>%
+  select(id, parent_id, discussion, t) %>%
+  group_by(discussion) %>%
   mutate(tau = t - min(t)) %>%
   ungroup() %>%
   filter(tau < max_tau)
