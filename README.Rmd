@@ -2,10 +2,9 @@
 output: github_document
 ---
 
- 
-  <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd. Please edit that file -->
   
-  ```{r, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -17,15 +16,15 @@ knitr::opts_chunk$set(
 # onlineMessageboardActivity
 
 <!-- badges: start -->
-  <!-- badges: end -->
+<!-- badges: end -->
   
-  The goal of onlineMessageboardActivity is to distribute the data and algorithms presented in "Modelling online discussion under circadian rhythms and superspreading dynamics" by Joe Meagher and Nial Friel.
+The goal of onlineMessageboardActivity is to distribute the data and algorithms presented in "Modelling online discussion under circadian rhythms and superspreading dynamics" by Joe Meagher and Nial Friel.
 
 ## Installation
 
 You can install the development version of onlineMessageboardActivity from [GitHub](https://github.com/) with:
   
-  ``` r
+ ``` r
 # install.packages("devtools")
 devtools::install_github("jpmeagher/onlineMessageboardActivity")
 ```
@@ -43,7 +42,7 @@ options(mc.cores = parallel::detectCores())
 
 Data used in the manuscript is called as follows:
   
-  ```{r data_example}
+```{r data_example}
 head(messageboard_df)
 head(train_df)
 head(test_df)

@@ -4,7 +4,6 @@
 # onlineMessageboardActivity
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of onlineMessageboardActivity is to distribute the data and
@@ -124,7 +123,7 @@ print(fit)
 #> psi[1]  NaN
 #> lp__      1
 #> 
-#> Samples were drawn using NUTS(diag_e) at Tue Dec 20 20:53:55 2022.
+#> Samples were drawn using NUTS(diag_e) at Tue Dec 20 20:56:42 2022.
 #> For each parameter, n_eff is a crude measure of effective sample size,
 #> and Rhat is the potential scale reduction factor on split chains (at 
 #> convergence, Rhat=1).
