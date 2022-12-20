@@ -1,10 +1,11 @@
-use---
+---
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
+ 
+  <!-- README.md is generated from README.Rmd. Please edit that file -->
+  
+  ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -16,24 +17,67 @@ knitr::opts_chunk$set(
 # onlineMessageboardActivity
 
 <!-- badges: start -->
-<!-- badges: end -->
-
-The goal of onlineMessageboardActivity is to ...
+  <!-- badges: end -->
+  
+  The goal of onlineMessageboardActivity is to distribute the data and algorithms presented in "Modelling online discussion under circadian rhythms and superspreading dynamics" by Joe Meagher and Nial Friel.
 
 ## Installation
 
 You can install the development version of onlineMessageboardActivity from [GitHub](https://github.com/) with:
-
-``` r
+  
+  ``` r
 # install.packages("devtools")
 devtools::install_github("jpmeagher/onlineMessageboardActivity")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
+```{r}
 library(onlineMessageboardActivity)
-## basic example code
+library(dplyr)
+library(rstan)
+## Stan options
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
 ```
+
+## Data Examples
+
+Data used in the manuscript is called as follows:
+  
+  ```{r data_example}
+head(messageboard_df)
+head(train_df)
+head(test_df)
+```
+
+## Algorithm examples
+
+Fit a model as follows
+
+```{r fit_model}
+## Prepare data
+train_df <- train_df %>% 
+  arrange(discussion) %>% 
+  group_by(discussion) %>% 
+  mutate(
+    within_discussion_parent_id = refactor_branching_structure(
+      id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = length(id)
+    )
+  ) %>% 
+  mutate(within_discussion_id = seq_along(id)) %>% 
+  ungroup()
+a <- 48
+# Specify Hyper-parameters
+period <- 24 # 24 hour period
+K <- 2
+omega <- structure(2 * pi * (1:K / period), dim = K)
+## Fit a model
+fit <- fit_branching_point_process(
+  t = train_df$t, branching_structure = train_df$within_discussion_parent_id,
+  observation_interval = a,
+  seed = 101
+)
+# see ?fit_branching_point_process for options
+print(fit)
+```
+
+See the supplementary information accompanying the manuscript for more detail

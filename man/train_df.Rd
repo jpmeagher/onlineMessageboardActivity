@@ -5,20 +5,22 @@
 \alias{train_df}
 \title{Training data for models of online message-board activity}
 \format{
-A dataframe with 8,108 observations of 4 variables: \describe{
+A dataframe with 2,097 observations of 4 variables:
+\describe{
  \item{id}{A unique, positive integer id for each event ordered by
- timestamp.} \item{parent_id}{The id for the parent of each event. Set to 0
- when the event is a post.} \item{tree}{The id for each distinct discussion
- tree seeded by a post.} \item{time}{The timestamp for each event.} }
+ timestamp.}
+ \item{parent_id}{The id for the parent of each event. Set to 0
+ when the event is a post and so does not have a parent.}
+ \item{discussion}{The id for each distinct discussion
+ seeded by a post.}
+ \item{time}{The timestamp for each event.} }
 }
 \usage{
 train_df
 }
 \description{
-A dataset containing discussion trees on the \eqn{r/ireland} subreddit seeded
-by posts between April 1 and April 28, 2019 and observed for 48 hours after the
-initial post. Each discussion seeded during the period is included with
-probability \eqn{p = 0.1} for a total of 704 discussions consisting of 2262
-events.
+A data set containing 10% of the discussions on the \eqn{r/ireland} subreddit seeded
+by posts between April 1 and April 7, 2019 inclusive and observed for 48 hours after the
+initial post. That is, we have a 704 discussions sampled at random.
 }
 \keyword{datasets}

@@ -60,12 +60,8 @@ S_training_total <- messageboard_df %>%
   unique() %>%
   as.numeric() %>%
   max()
-
-training_discussions <- rbinom(S_training_total, 1, p = 0.1) %>%
-  as.logical() %>%
-  which()
-
-S_training <- length(training_discussions)
+S_training <- round(0.1 * S_training_total)
+training_discussions <- sort(sample.int(S_training_total, S_training))
 
 train_df <- messageboard_df %>%
   filter(discussion %in% training_discussions) %>%
@@ -87,7 +83,6 @@ train_df <- messageboard_df %>%
 usethis::use_data(train_df, overwrite = TRUE)
 
 ## Testing Data
-set.seed(1234567)
 
 S_testing_total <- messageboard_df %>%
   filter(time < dmy(11052019)) %>%
@@ -96,12 +91,8 @@ S_testing_total <- messageboard_df %>%
   as.numeric() %>%
   max()
 
-tmp_testing_discussions <- rbinom(S_testing_total, 1, p = 0.1) %>%
-  as.logical()
-tmp_testing_discussions[training_discussions] <- FALSE
-testing_discussions <- tmp_testing_discussions %>%
-  which()
-S_testing <- length(testing_discussions)
+S_testing <- round(0.1 * S_testing_total)
+testing_discussions <- sort(sample(seq.int(S_testing_total)[-training_discussions], S_testing))
 
 test_df <- messageboard_df %>%
   filter(discussion %in% testing_discussions) %>%
@@ -118,6 +109,29 @@ test_df <- messageboard_df %>%
   group_by(discussion) %>%
   mutate(tau = t - min(t)) %>%
   ungroup() %>%
-  filter(tau < max_tau)
+  filter(tau < max_tau) %>%
+  select(id, parent_id, discussion, t)
 
 usethis::use_data(test_df, overwrite = TRUE)
+
+# messageboard_df %>%
+#   mutate(t = as.numeric(difftime(time, dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
+#   group_by(discussion) %>%
+#   mutate(tau = t - min(t)) %>%
+#   filter(tau > max_tau) %>%
+#   nrow()
+#
+# messageboard_df %>%
+#   mutate(t = as.numeric(difftime(time, dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
+#   group_by(discussion) %>%
+#   mutate(tau = t - min(t)) %>%
+#   filter(tau > max_tau) %>%
+#   use_series(discussion) %>%
+#   unique() %>%
+#   length()
+#
+#
+#
+# 1191 / sum(messageboard_df$parent_id != 0)
+# 512 / sum(messageboard_df$parent_id == 0)
+# 512 / S_testing_total

@@ -13,6 +13,7 @@ heterogeneous_branching_point_process_marginal_likelihood(
   eta_vec,
   omega = NULL,
   alpha = NULL,
+  z = NULL,
   log = TRUE,
   perform_checks = TRUE
 )
@@ -40,6 +41,9 @@ excitation.}
 
 \item{alpha}{A real-valued vector of length 2K. Coefficients of the
 sinusoidal basis function for exogenous excitation.}
+
+\item{z}{A non-negative integer-valued vector of length N. The number of
+offspring from each point.}
 
 \item{log}{A logical scalar. If `TRUE` then the log-likelihood is returned.}
 

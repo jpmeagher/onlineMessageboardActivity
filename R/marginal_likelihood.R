@@ -4,6 +4,8 @@
 #' the class of branching processes described in Meagher & Friel.
 #'
 #' @inheritParams branching_point_process_likelihood
+#' @param z A non-negative integer-valued vector of length N. The number of
+#'   offspring from each point.
 #' @param mu_vec A positive real-valued vector of length N. The reproduction
 #'   number for each point in the cluster.
 #' @param psi_vec A positive real-valued vector of length N. The dispersion
@@ -19,6 +21,7 @@ heterogeneous_branching_point_process_marginal_likelihood <- function(
     t, beta, a,
     mu_vec, psi_vec, eta_vec,
     omega = NULL, alpha = NULL,
+    z = NULL,
     log = TRUE,
     perform_checks = TRUE
 ){
@@ -31,11 +34,14 @@ heterogeneous_branching_point_process_marginal_likelihood <- function(
     checkmate::assert_numeric(psi_vec, len =  N, lower = 0)
     checkmate::assert_numeric(eta_vec, len =  N, lower = 0)
     checkmate::assert_number(a, lower = max(t))
+    checkmate::assert_integerish(z, lower = 0, len = N, null.ok = T)
     checkmate::assert_true(!xor(is.null(alpha), is.null(omega)))
   }
   inf_idx <- is.infinite(psi_vec)
   # Offspring Counts
-  z <- sapply(1:N, function(i) sum(beta == i))
+  if (is.null(z)) {
+    z <- sapply(1:N, function(i) sum(beta == i))
+  }
   # Offspring point intensity
   alpha_fun <- 1
   if (!is.null(alpha) & N > 1) {

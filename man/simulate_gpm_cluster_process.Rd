@@ -19,6 +19,7 @@ simulate_gpm_cluster_process(
   sinusoid_frequencies = NULL,
   dominating_scalar = ifelse(is.null(sinusoid_frequencies), 1, 2),
   cluster_id = NULL,
+  refactor_output = TRUE,
   perform_checks = TRUE
 )
 }
@@ -71,6 +72,11 @@ absolute-time modulating function for all \eqn{t}. Allows Lewis thinning
 for simulating offspring processes.}
 
 \item{cluster_id}{A scalar.An arbitrary cluster label.}
+
+\item{refactor_output}{Logical. Should the output branching structure be
+refactored to a more natural representation. This refactoring is
+computationally expensive and should be set to `FALSE` when it is not
+required.}
 
 \item{perform_checks}{A logical scalar. Should inputs be checked before
 executing code.}

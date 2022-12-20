@@ -109,6 +109,10 @@ simulate_poisson_offspring_process <- function(
 #'   absolute-time modulating function for all \eqn{t}. Allows Lewis thinning
 #'   for simulating offspring processes.
 #' @param cluster_id A scalar.An arbitrary cluster label.
+#' @param refactor_output Logical. Should the output branching structure be
+#'   refactored to a more natural representation. This refactoring is
+#'   computationally expensive and should be set to `FALSE` when it is not
+#'   required.
 #' @inheritParams refactor_branching_structure
 #'
 #' @return A data frame summarising the simulated Gamma-Poisson mixture cluster
@@ -125,7 +129,7 @@ simulate_gpm_cluster_process <- function(
     offspring_dispersion_parameter = immigrant_dispersion_parameter,
     sinusoid_coefficients = NULL, sinusoid_frequencies = NULL,
     dominating_scalar = ifelse(is.null(sinusoid_frequencies), 1, 2),
-    cluster_id = NULL,
+    cluster_id = NULL, refactor_output = TRUE,
     perform_checks = TRUE
 ){
   N <- length(t_seed)
@@ -205,11 +209,11 @@ simulate_gpm_cluster_process <- function(
   )
   M <- length(t_sim)
   cluster_df$z_sim[1] <- M
-  nu_sim <- ifelse(
-    is.infinite(offspring_dispersion_parameter),
-    rep(offspring_reproduction_number, M),
-    stats::rgamma(M, shape = offspring_dispersion_parameter, rate = offspring_dispersion_parameter / offspring_reproduction_number)
-  )
+  if (is.infinite(offspring_dispersion_parameter)) {
+    nu_sim <- rep(offspring_reproduction_number, M)
+  } else {
+    nu_sim <- stats::rgamma(M, shape = offspring_dispersion_parameter, rate = offspring_dispersion_parameter / offspring_reproduction_number)
+  }
   if (M > 0) {
     cluster_df <- rbind(
       cluster_df,
@@ -235,11 +239,11 @@ simulate_gpm_cluster_process <- function(
       perform_checks = FALSE
     )
     M <- length(t_sim)
-    nu_sim <- ifelse(
-      is.infinite(offspring_dispersion_parameter),
-      rep(offspring_reproduction_number, M),
-      stats::rgamma(M, shape = offspring_dispersion_parameter, rate = offspring_dispersion_parameter / offspring_reproduction_number)
-      )
+    if (is.infinite(offspring_dispersion_parameter)) {
+      nu_sim <- rep(offspring_reproduction_number, M)
+    } else {
+      nu_sim <- stats::rgamma(M, shape = offspring_dispersion_parameter, rate = offspring_dispersion_parameter / offspring_reproduction_number)
+    }
     cluster_df$z_sim[i] <- M
     if (M > 0) {
       cluster_df <- rbind(
@@ -256,16 +260,18 @@ simulate_gpm_cluster_process <- function(
     i <- i+1
   }
   ## Bookkeeping to tidy up output
-  cluster_df <- dplyr::arrange(cluster_df, t)
-  cluster_df$parent_id <- refactor_branching_structure(
-    id = cluster_df$id, parent_id = cluster_df$parent_id,
-    is_immigrant = cluster_df$parent_id == 0,
-    S = nrow(cluster_df), perform_checks = FALSE
-  )
-  cluster_df$id <- 1:nrow(cluster_df)
-  if (!is.null(cluster_id)) {
-    cluster_df$id <- paste(cluster_id, cluster_df$id, sep = ".")
-    cluster_df$parent_id <- paste(cluster_id, cluster_df$parent_id, sep = ".")
+  if (refactor_output) {
+    cluster_df <- dplyr::arrange(cluster_df, t)
+    cluster_df$parent_id <- refactor_branching_structure(
+      id = cluster_df$id, parent_id = cluster_df$parent_id,
+      is_immigrant = cluster_df$parent_id == 0,
+      S = nrow(cluster_df), perform_checks = FALSE
+    )
+    cluster_df$id <- 1:nrow(cluster_df)
+    if (!is.null(cluster_id)) {
+      cluster_df$id <- paste(cluster_id, cluster_df$id, sep = ".")
+      cluster_df$parent_id <- paste(cluster_id, cluster_df$parent_id, sep = ".")
+    }
   }
   cluster_df
 }

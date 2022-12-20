@@ -311,3 +311,26 @@ test_that("simulating hawkes from gpmcp works", {
   expect_true(all(tst$nu[-1] != R * 0.99))
   expect_true(all(diff(tst$t) > 0))
 })
+
+test_that("additional checks on the simulation function",{
+  day <- 24
+  f <- 1 / c(day, day / 2)
+  omega <- 2 * pi * f
+  alpha <- c(-0.34, -0.47, -0.18, 0.34)
+
+  set.seed(101)
+  tst <- simulate_gpm_cluster_process(
+    t_seed = 0, branching_structure_seed = 0,
+    observation_horizon = 0, simulation_horizon = 48,
+    immigrant_reproduction_number = 4,
+    immigrant_gi_exp_decay_rate = 0.1,
+    immigrant_dispersion_parameter = 1,
+    offspring_reproduction_number = 2,
+    offspring_gi_exp_decay_rate = 0.25,
+    offspring_dispersion_parameter = 0.25,
+    sinusoid_coefficients = alpha,
+    sinusoid_frequencies = omega
+  )
+
+  expect_true(length(unique(tst$nu)) == nrow(tst))
+})
