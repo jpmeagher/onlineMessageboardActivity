@@ -47,6 +47,8 @@ for offspring offspring processes.}
 \item{eta_offspring}{A positive real-valued scalar. The memory decay rate for
 offspring offspring processes.}
 
+\item{psi_offspring}{A positive real valued scalar. The dispersion parameter for offspring point fitness.}
+
 \item{omega}{A positive, increasing real-valued vector of length K.
 Frequencies defining the sinusoidal basis functions for exogeneous
 excitation.}
@@ -62,8 +64,6 @@ sinusoidal basis function for exogenous excitation.}
 
 \item{perform_checks}{A logical scalar. Should inputs be checked before
 executing code.}
-
-\item{psi_offsprind}{A positive real valued scalar. The dispersion parameter for offspring point fitness.}
 }
 \value{
 A scalar value. A monte carlo estimator of the likelihood for the branching point process.

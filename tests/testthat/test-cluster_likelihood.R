@@ -73,7 +73,7 @@ test_that("low level likelihood function returns a value and throws correct erro
       beta = sim_cluster$parent_id,
       nu = sim_cluster$nu,
       xi = c(0.2, rep(0.33, nrow(sim_cluster) - 1)),
-      a = 30
+      a = 10
     )
   )
 

@@ -84,19 +84,17 @@ fit_gpmcp <- function(
 #'   relative activity function,
 #' @param omega A real valued vector of length K. The angular frequency of each sinusoidal
 #'   component.
-#' @param omega
 #' @param is_hetero A logical vector of length M. Do points of each type have heterogeneous offspring
 #'   processes.
 #' @param shape_mu A positive real-valued scalar. The shape of the Gamma prior on the reproduction number.
 #' @param rate_mu A positive real-valued scalar. The rate of the Gamma prior on the reproduction number.
 #' @param shape_eta A positive real-valued scalar. The shape of the Gamma prior on the memory decay rate.
 #' @param rate_eta A positive real-valued scalar. The rate of the Gamma prior on the memory decay rate.
+#' @inheritParams refactor_branching_structure
 #' @param ... Additional arguments for`rstan::sampling`.
 #'
 #' @return A `stanfit` object. Samples from the posterior distribution over model parameters.
 #' @export
-#'
-#' @examples
 fit_branching_point_process <- function(
     t, branching_structure, observation_interval,
     point_type = rep(1, length(t)),
@@ -138,7 +136,7 @@ fit_branching_point_process <- function(
     init_fun <- function(){
       list(
         mu = NULL, log_psi = NULL, eta = NULL,
-        alpha = runif(K * 2, min = -1 /  (2 * K), max = 1 /  (2 * K))
+        alpha = stats::runif(K * 2, min = -1 /  (2 * K), max = 1 /  (2 * K))
       )
     }
   } else {

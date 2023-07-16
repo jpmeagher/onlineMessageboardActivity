@@ -48,6 +48,9 @@ processes.}
 
 \item{rate_eta}{A positive real-valued scalar. The rate of the Gamma prior on the memory decay rate.}
 
+\item{perform_checks}{A logical scalar. Should inputs be checked before
+executing code.}
+
 \item{...}{Additional arguments for`rstan::sampling`.}
 }
 \value{

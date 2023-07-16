@@ -2,7 +2,6 @@
 
 export(compute_pwm_crps)
 export(compute_rps)
-export(fit_TiDeDSH)
 export(fit_branching_point_process)
 export(fit_gpmcp)
 export(gamma_posterior_individual_reproduction_number)

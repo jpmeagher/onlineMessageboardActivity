@@ -1,18 +1,14 @@
-library(dplyr)
-library(lubridate)
-
 test_that("Stan Sampling works", {
   df <- train_df %>%
-    mutate(t = as.numeric(difftime(time, lubridate::dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
-    filter(as.numeric(tree) < 500) %>%
-    arrange(tree) %>%
-    group_by(tree) %>%
-    mutate(tau = t - min(t)) %>%
-    filter(tau < 12) %>%
-    mutate(beta = refactor_branching_structure(
+    dplyr::filter(as.numeric(discussion) < 500) %>%
+    dplyr::arrange(discussion) %>%
+    dplyr::group_by(discussion) %>%
+    dplyr::mutate(tau = t - min(t)) %>%
+    dplyr::filter(tau < 12) %>%
+    dplyr::mutate(beta = refactor_branching_structure(
       id = id, parent_id = parent_id, is_immigrant = parent_id == 0, S = length(id)
     )) %>%
-    ungroup()
+    dplyr::ungroup()
 
   unit <- 24
   omega <- structure(2 * pi * (1:2 / unit), dim = 2)

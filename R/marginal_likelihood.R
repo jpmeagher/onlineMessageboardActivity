@@ -15,8 +15,6 @@
 #'
 #' @return The (log)-likelihood for the branching point process.
 #' @export
-#'
-#' @examples
 heterogeneous_branching_point_process_marginal_likelihood <- function(
     t, beta, a,
     mu_vec, psi_vec, eta_vec,

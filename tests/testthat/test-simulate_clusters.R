@@ -2,11 +2,8 @@
 t_min <- lubridate::ymd_hms(20190401000000, tz = "Europe/London")
 tau_threshold_short <- 3
 # ## Interesting test case:
-tst_tr <- 1415
-tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
-  dplyr::mutate(
-    t = difftime(time, t_min, units = "hours") %>% as.numeric()
-  ) %>%
+tst_tr <- 6
+tst_cl <- train_df[train_df$discussion == tst_tr, ] %>%
   dplyr::mutate(
     t = t - min(t)
   ) %>%

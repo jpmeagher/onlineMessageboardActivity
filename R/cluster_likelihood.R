@@ -153,8 +153,6 @@ homogeneous_bpp_likelihood <- function(
 #' @export
 #'
 #' @seealso homogeneous_bpp_likelihood tide_mixture_bpp_likelihood
-#'
-#' @examples
 mixture_bpp_likelihood <- function(
     t, beta, a,
     mu_immigrant, eta_immigrant,
@@ -196,8 +194,6 @@ mixture_bpp_likelihood <- function(
 #' @export
 #'
 #' @seealso homogeneous_bpp_likelihood mixture_bpp_likelihood
-#'
-#' @examples
 tide_mixture_bpp_likelihood <- function(
     t, beta, a,
     mu_immigrant, eta_immigrant,
@@ -237,7 +233,7 @@ tide_mixture_bpp_likelihood <- function(
 #' @param a A real-valued scalar. The upper limit of the observation interval for estimating the latent fitness of each point.
 #' @param b A real-valued scalar. The upper limit of the interval over which the likelihood is estimated.
 #' @param psi_immigrant A positive real valued scalar. The dispersion parameter for immigrant point fitness.
-#' @param psi_offsprind A positive real valued scalar. The dispersion parameter for offspring point fitness.
+#' @param psi_offspring A positive real valued scalar. The dispersion parameter for offspring point fitness.
 #' @param n_samples A positive integer. The number of latent fitness samples drawn to produce the Monte Carlo estimator.
 #' @param seed The random seed for sampling fitness variables,
 #'
@@ -245,8 +241,6 @@ tide_mixture_bpp_likelihood <- function(
 #' @export
 #'
 #' @seealso tide_mixture_bpp_likelihood homogeneous_bpp_likelihood mixture_bpp_likelihood
-#'
-#' @examples
 heterogeneous_tide_mixture_bpp_likelihood <- function(
     t, beta, a, b = a,
     mu_immigrant, eta_immigrant, psi_immigrant,
@@ -282,7 +276,7 @@ heterogeneous_tide_mixture_bpp_likelihood <- function(
       sinusoid_coefficients = alpha, sinusoid_frequencies = omega,
       perform_checks = FALSE
     )
-    nu[1, ] <-  rgamma(n_samples, shape = post_imm$shape, rate = post_imm$rate)
+    nu[1, ] <-  stats::rgamma(n_samples, shape = post_imm$shape, rate = post_imm$rate)
   } else {
     nu[1, ] <- mu_immigrant
   }
@@ -297,7 +291,7 @@ heterogeneous_tide_mixture_bpp_likelihood <- function(
       perform_checks = TRUE
     )
     nu[-1, ] <- replicate(n_samples, {
-      rgamma(N-1, shape = post_off$shape, rate = post_off$rate)
+      stats::rgamma(N-1, shape = post_off$shape, rate = post_off$rate)
       })
   } else {
     nu[-1, ] <- mu_offspring

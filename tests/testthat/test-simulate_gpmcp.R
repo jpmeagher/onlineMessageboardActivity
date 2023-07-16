@@ -205,11 +205,8 @@ test_that("simulating hawkes from gpmcp works", {
   t_min <- lubridate::ymd_hms(20190401000000, tz = "Europe/London")
   tau1 <- 3
   # ## Interesting test case:
-  tst_tr <- 1415
-  tst_cl <- train_df[train_df$tree == tst_tr, ] %>%
-    dplyr::mutate(
-      t = difftime(time, t_min, units = "hours") %>% as.numeric()
-    ) %>%
+  tst_tr <- 6
+  tst_cl <- train_df[train_df$discussion == tst_tr, ] %>%
     dplyr::mutate(
       rel_t = t - min(t)
     ) %>%

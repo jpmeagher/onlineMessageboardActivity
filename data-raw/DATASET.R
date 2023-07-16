@@ -17,17 +17,15 @@ raw_df <- read.csv("~/R/Projects/reddit_data/data/ireland_SR_1549670400_15812064
   mutate(parent = future_sapply(strsplit(Parent, "_"), function(x) x[2])) %>%
   select(time = Time, type, id = ID, parent)
 
-# ## Explicitly identify posts and comments to improve clarity
-# new_type <- rep("comment", nrow(raw_df))
-# new_type[raw_df$type == "t3"] <- "post"
-# raw_df <- raw_df %>%
-#   mutate(type = factor(new_type, levels = c("post", "comment")))
-# rm(new_type)
-
-
 ## Specify data for analysis
+## We use 6 weeks of discussions
+## We filter for nodes occurring in the 44 days following April 1, 2019
+## This allows us to observe the first 48 hours of all relevant discussions
+## We filter out nodes belonging to discussions seeded outside the period
+
+# all nodes in the 44 days
 messageboard_df <- raw_df %>%
-  filter(dmy(01042019) < time & dmy(01042019) + days(42) > time) %>%
+  filter(dmy(01042019) < time & dmy(01042019) + days(44) > time) %>%
   mutate(
     parent_id = refactor_branching_structure(
       id = id,
@@ -37,7 +35,10 @@ messageboard_df <- raw_df %>%
     )) %>%
   mutate(id = 1:nrow(.)) %>%
   mutate(discussion = factor(identify_clusters(parent_id))) %>%
-  select(id, parent_id, discussion, time) %>%
+  select(id, parent_id, discussion, time)
+
+# filter out nodes from discussions seeded before April 1
+messageboard_df <- messageboard_df %>%
   filter(!is.na(discussion)) %>%
   mutate(
     parent_id = refactor_branching_structure(
@@ -48,18 +49,38 @@ messageboard_df <- raw_df %>%
     )) %>%
   mutate(id = 1:nrow(.))
 
+## identify discussions seeded after the 6 week period
+late_discussions <- messageboard_df %>%
+  filter(parent_id == 0) %>%
+  filter(time > dmy(01042019) + days(42)) %>%
+  use_series(discussion)
+
+# filter out late discussions
+messageboard_df <- messageboard_df %>%
+  filter(!(discussion %in% late_discussions)) %>%
+  mutate(
+    parent_id = refactor_branching_structure(
+      id = id,
+      parent_id = parent_id,
+      is_immigrant = (parent_id == 0),
+      S = 2000
+    )) %>%
+  mutate(id = 1:nrow(.)) %>%
+  mutate(discussion = factor(discussion))
+
 usethis::use_data(messageboard_df, overwrite = TRUE)
 
 ## Training data
-max_tau <- 48
+max_tau <- 48 # 48 hours
 set.seed(123456)
 
+# Train on 10% of discussions seeded in the first 21 days
 S_training_total <- messageboard_df %>%
-  filter(time < dmy(08042019)) %>%
+  filter(time < dmy(01042019) + days(21)) %>%
   use_series(discussion) %>%
   unique() %>%
   as.numeric() %>%
-  max()
+  length()
 S_training <- round(0.1 * S_training_total)
 training_discussions <- sort(sample.int(S_training_total, S_training))
 
@@ -78,18 +99,26 @@ train_df <- messageboard_df %>%
   mutate(tau = t - min(t)) %>%
   ungroup() %>%
   filter(tau < max_tau) %>%
-  select(id, parent_id, discussion, t)
+  select(id, parent_id, discussion, t) %>%
+  mutate(
+    parent_id = refactor_branching_structure(
+      id = id, parent_id = parent_id,
+      is_immigrant = parent_id == 0,
+      S = 250
+    )
+  ) %>%
+  mutate(id = seq_along(id))
 
 usethis::use_data(train_df, overwrite = TRUE)
 
 ## Testing Data
 
+# Test on 10% of discussions over the full 6 weeks
 S_testing_total <- messageboard_df %>%
-  filter(time < dmy(11052019)) %>%
   use_series(discussion) %>%
   unique() %>%
   as.numeric() %>%
-  max()
+  length()
 
 S_testing <- round(0.1 * S_testing_total)
 testing_discussions <- sort(sample(seq.int(S_testing_total)[-training_discussions], S_testing))
@@ -110,28 +139,14 @@ test_df <- messageboard_df %>%
   mutate(tau = t - min(t)) %>%
   ungroup() %>%
   filter(tau < max_tau) %>%
-  select(id, parent_id, discussion, t)
+  select(id, parent_id, discussion, t) %>%
+  mutate(
+    parent_id = refactor_branching_structure(
+      id = id, parent_id = parent_id,
+      is_immigrant = parent_id == 0,
+      S = 250
+    )
+  ) %>%
+  mutate(id = seq_along(id))
 
 usethis::use_data(test_df, overwrite = TRUE)
-
-# messageboard_df %>%
-#   mutate(t = as.numeric(difftime(time, dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
-#   group_by(discussion) %>%
-#   mutate(tau = t - min(t)) %>%
-#   filter(tau > max_tau) %>%
-#   nrow()
-#
-# messageboard_df %>%
-#   mutate(t = as.numeric(difftime(time, dmy_hms(010419000000, tz = "Europe/London"), units = "hours"))) %>%
-#   group_by(discussion) %>%
-#   mutate(tau = t - min(t)) %>%
-#   filter(tau > max_tau) %>%
-#   use_series(discussion) %>%
-#   unique() %>%
-#   length()
-#
-#
-#
-# 1191 / sum(messageboard_df$parent_id != 0)
-# 512 / sum(messageboard_df$parent_id == 0)
-# 512 / S_testing_total
