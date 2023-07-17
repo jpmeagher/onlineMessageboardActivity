@@ -5,7 +5,7 @@
 \alias{test_df}
 \title{Testing data models for online message-board activity}
 \format{
-A dataframe with 11,668 observations of 4 variables:
+A dataframe with 11,637 observations of 4 variables:
 \describe{
   #'  \item{id}{A unique, positive integer id for each event ordered by
  timestamp.}
@@ -13,7 +13,7 @@ A dataframe with 11,668 observations of 4 variables:
  when the event is a post and so does not have a parent.}
  \item{discussion}{The id for each distinct discussion
  seeded by a post.}
- \item{time}{The timestamp for each event.} }
+ \item{t}{The number of hours since 00:00:00 on April 1, 2019.} }
 }
 \usage{
 test_df

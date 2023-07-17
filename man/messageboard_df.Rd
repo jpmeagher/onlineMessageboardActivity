@@ -5,7 +5,7 @@
 \alias{messageboard_df}
 \title{Timestamps and branching structure for online message-board events}
 \format{
-A dataframe with 118,253 observations of 4 variables:
+A dataframe with 117,787 observations of 4 variables:
 \describe{
   \item{id}{A unique, positive integer id for each event ordered by timestamp.}
   \item{parent_id}{The id for the parent of each event. Set to 0 when the event is a post.}
@@ -19,6 +19,6 @@ messageboard_df
 \description{
 A data set containing timestamps and branching structure for posts on the
 \eqn{r/ireland} subreddit seeded during the 42 days (6 weeks) starting on April 1,
-2019. Consists of 118,253 events within 38,616 converstaions.
+2019. Consists of 117,787 events within 38,616 converstaions.
 }
 \keyword{datasets}

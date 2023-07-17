@@ -18,14 +18,12 @@ raw_df <- read.csv("~/R/Projects/reddit_data/data/ireland_SR_1549670400_15812064
   select(time = Time, type, id = ID, parent)
 
 ## Specify data for analysis
-## We use 6 weeks of discussions
-## We filter for nodes occurring in the 44 days following April 1, 2019
-## This allows us to observe the first 48 hours of all relevant discussions
-## We filter out nodes belonging to discussions seeded outside the period
+## We consider 6 weeks of activity on the r/ireland subreddit
+## We identify nodes occurring in the 42 days following April 1, 2019
 
-# all nodes in the 44 days
+# all nodes in the 42 days
 messageboard_df <- raw_df %>%
-  filter(dmy(01042019) < time & dmy(01042019) + days(44) > time) %>%
+  filter(dmy(01042019) < time & dmy(01042019) + days(42) > time) %>%
   mutate(
     parent_id = refactor_branching_structure(
       id = id,
@@ -48,25 +46,6 @@ messageboard_df <- messageboard_df %>%
       S = 2000
     )) %>%
   mutate(id = 1:nrow(.))
-
-## identify discussions seeded after the 6 week period
-late_discussions <- messageboard_df %>%
-  filter(parent_id == 0) %>%
-  filter(time > dmy(01042019) + days(42)) %>%
-  use_series(discussion)
-
-# filter out late discussions
-messageboard_df <- messageboard_df %>%
-  filter(!(discussion %in% late_discussions)) %>%
-  mutate(
-    parent_id = refactor_branching_structure(
-      id = id,
-      parent_id = parent_id,
-      is_immigrant = (parent_id == 0),
-      S = 2000
-    )) %>%
-  mutate(id = 1:nrow(.)) %>%
-  mutate(discussion = factor(discussion))
 
 usethis::use_data(messageboard_df, overwrite = TRUE)
 
@@ -115,6 +94,7 @@ usethis::use_data(train_df, overwrite = TRUE)
 
 # Test on 10% of discussions over the full 6 weeks
 S_testing_total <- messageboard_df %>%
+  filter(time < dmy(01042019) + days(42) - (max_tau / 24)) %>%
   use_series(discussion) %>%
   unique() %>%
   as.numeric() %>%

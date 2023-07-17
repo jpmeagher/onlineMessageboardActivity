@@ -8,12 +8,12 @@
 A dataframe with 5891 observations of 4 variables:
 \describe{
  \item{id}{A unique, positive integer id for each event ordered by
- timestamp.}
+ time}
  \item{parent_id}{The id for the parent of each event. Set to 0
  when the event is a post and so does not have a parent.}
  \item{discussion}{The id for each distinct discussion
  seeded by a post.}
- \item{time}{The timestamp for each event.} }
+ \item{t}{The number of hours since 00:00:00 on April 1, 2019.} }
 }
 \usage{
 train_df
