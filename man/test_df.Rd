@@ -5,7 +5,7 @@
 \alias{test_df}
 \title{Testing data models for online message-board activity}
 \format{
-A dataframe with 11,637 observations of 4 variables:
+A dataframe with 11,321 observations of 4 variables:
 \describe{
   #'  \item{id}{A unique, positive integer id for each event ordered by
  timestamp.}
@@ -21,7 +21,7 @@ test_df
 \description{
 A data set containing 10% of the discussions on the \eqn{r/ireland} subreddit
 seeded  by posts between April 1 and May 12, 2019 inclusive and observed for 48 hours after the
-initial post. That is, we have a 3,862 discussions sampled at random after excluding discussions
+initial post. That is, we have a 3,716 discussions sampled at random after excluding discussions
 already included in `train_df`.
 }
 \keyword{datasets}

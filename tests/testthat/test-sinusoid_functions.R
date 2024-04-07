@@ -41,9 +41,9 @@ test_that("linear combination of sinusoids works", {
 })
 
 test_that("integral of sinusoids works", {
-  t <- seq(-100, 100, length.out = 1001)
   a <- -200
   b <- 200
+  t <- seq(a, b, length.out = 1001)
 
   day <- 24
   f <- 1 / c(day / 2, day, 7 * day)
@@ -138,9 +138,9 @@ test_that("integral of sinusoids works", {
 })
 
 test_that("integral of exponentially decaying sinusoids works", {
-  t <- seq(0, 50, length.out = 1001)
   a <- 0
   b <- 50
+  t <- seq(a, b, length.out = 1001)
 
   day <- 24
   f <- 1 / c(day, day / 2)

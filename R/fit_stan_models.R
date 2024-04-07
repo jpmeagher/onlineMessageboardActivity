@@ -164,3 +164,65 @@ fit_branching_point_process <- function(
   out
 }
 
+#' Fit a periodic point process to data
+#'
+#' Fits a Poisson process with periodic intensity to data.
+#'
+#' @param t A vector of N positive real values. The time associated with each point.
+#' @param immigrant_observation_interval A real valued scalar. Defines the interval over which points arrive.
+#' @inheritParams fit_branching_point_process
+#'
+#' @return An object of class `stanfit` returned by `rstan::sampling`
+#' @export
+fit_periodic_point_process <- function(
+    t,
+    immigrant_observation_interval,
+    K = 0,
+    omega = numeric(0),
+    perform_checks = TRUE,
+    ...
+){
+  # Specify vector lengths
+  N <- length(t)
+  # Check inputs
+  if (perform_checks) {
+    checkmate::assert_number(immigrant_observation_interval, lower = 0)
+    checkmate::assert_numeric(t, lower = 0, upper = immigrant_observation_interval, any.missing = FALSE)
+    checkmate::assert_integerish(K, lower = 0)
+    checkmate::assert_numeric(omega, sorted = TRUE, len = K, any.missing = FALSE, lower = 0)
+  }
+  # Clarify variable structure for Stan
+  omega <- structure(omega, dim = K)
+  # Initialising function
+  if (K > 0) {
+    init_fun <- function(){
+      list(
+        lambda_0 = NULL,
+        alpha = stats::runif(K * 2, min = -1 /  (2 * K), max = 1 /  (2 * K))
+      )
+    }
+  } else {
+    init_fun <- function() {
+      list(
+        mu = NULL,
+        alpha = NULL
+      )
+    }
+  }
+  # Data For Stan program
+  standata <- list(
+    N = N,
+    K = K,
+    omega = omega,
+    t = t,
+    a_0 = immigrant_observation_interval
+  )
+  # Perform sampling
+  out <- rstan::sampling(
+    stanmodels$periodic_point_process, data = standata, init = init_fun, ...
+  )
+  out
+}
+
+
+
