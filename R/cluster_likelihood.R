@@ -28,9 +28,8 @@ branching_point_process_likelihood <- function(
   log = TRUE,
   perform_checks = TRUE
   ){
-
+  N <- length(t)
   if (perform_checks) {
-    N <- length(t)
     checkmate::assert_numeric(t, any.missing = FALSE)
     checkmate::assert_true(beta[1] == 0)
     checkmate::assert_integerish(beta[-1], len = N - 1, lower = 1, upper = N-1)
@@ -39,7 +38,6 @@ branching_point_process_likelihood <- function(
     checkmate::assert_number(a, lower = max(t))
     checkmate::assert_true(!xor(is.null(alpha), is.null(omega)))
   }
-  N <- length(t)
   # Compensator
   Psi <- stats::pexp(a - t, rate = xi)
   if (!is.null(alpha)) {

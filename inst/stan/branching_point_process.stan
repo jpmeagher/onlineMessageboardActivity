@@ -236,6 +236,7 @@ transformed data {
     inf_idx[i] = is_hetero[type[i]] == 0;
   }
 }
+
 // The parameters accepted by the model.
 parameters {
   vector<lower=0>[M] mu;     // Reproduction numbers
